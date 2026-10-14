@@ -1,0 +1,76 @@
+# =========================
+# Unity Engine
+# =========================
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+Logs/
+UserSettings/
+MemoryCaptures/
+!/[Aa]ssets/**/*.meta
+[Aa]ssets/Plugins/Editor/JetBrains*
+.vs/
+.plastic/
+*.workspace
+*.wktree
+*.selector
+*.changes
+.gradle/
+ExportedObj/
+.consulo/
+*.unityproj
+*.tmp
+*.userprefs
+*.pidb
+*.boop
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+sysinfo.txt
+*.apk
+*.aab
+*.unitypackage
+*.app
+crashlytics-build.properties
+
+# =========================
+# Solutions & Projets IDE (générique)
+# =========================
+*.csproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+
+# =========================
+# Outils IA & Extensions
+# =========================
+.qodo/
+.gemini/
+.tmp.driveupload/
+.tmp.drivedownload/
+
+# =========================
+# Visual Studio / VS Code
+# =========================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.history/
+[Dd]ebug/
+[Rr]elease/
+[Xx]64/
+[Bb]in/
