@@ -47,10 +47,20 @@ namespace Com.IsartDigital
         /// <param name="pLacunarity">Frequency of the Wave</param>
         /// <returns></returns>
         public static float[,] GenerateNoiseMap(int pMapWidth, int pMapHeight,
-        float pScale, int pOctave, float pPersistance, float pLacunarity
-        )
+        int pSeed, float pScale, int pOctave, float pPersistance, float pLacunarity,
+        Vector2 pOffset)
         {
             float[,] lNoiseMap = new float[pMapWidth, pMapHeight];
+
+            // Seed Parameter
+            System.Random lRng = new System.Random(pSeed);
+            Vector2[] lOctaveOffsets = new Vector2[pOctave];
+            for (int i = 0; i < pOctave; i++)
+            {
+                float lOffsetX = lRng.Next(-100000, 100000) + pOffset.x;
+                float lOffsetY = lRng.Next(-100000, 100000) + pOffset.y;
+                lOctaveOffsets[i] = new Vector2(lOffsetX, lOffsetY);
+            }
 
             // Ensure Scale is Bigger than 0
             if (pScale <= 0) pScale = 0.001f;
@@ -69,8 +79,8 @@ namespace Com.IsartDigital
 
                     for (int i = 0; i < pOctave; i++)
                     {
-                        lSampleX = x / pScale * lFrequency;
-                        lSampleY = y / pScale * lFrequency;
+                        lSampleX = x / pScale * lFrequency + lOctaveOffsets[i].x;
+                        lSampleY = y / pScale * lFrequency + lOctaveOffsets[i].y;
 
                         lPerlinValue = Mathf.PerlinNoise(lSampleX, lSampleY) * 2 - 1;
                         lNoiseHeight += lPerlinValue * lAmplitude;
