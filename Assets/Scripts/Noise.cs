@@ -68,6 +68,9 @@ namespace Com.IsartDigital
             float lMaxNoiseHeight = float.MinValue;
             float lMinNoiseHeight = float.MaxValue;
 
+            float lHalfWidth = pMapWidth / 2f;
+            float lHalfHeight = pMapHeight / 2f;
+
             // Creates Loop Variables
             float lSampleX, lSampleY, lPerlinValue, lAmplitude, lFrequency, lNoiseHeight;
             for (int y = 0; y < pMapHeight; y++)
@@ -79,8 +82,8 @@ namespace Com.IsartDigital
 
                     for (int i = 0; i < pOctave; i++)
                     {
-                        lSampleX = x / pScale * lFrequency + lOctaveOffsets[i].x;
-                        lSampleY = y / pScale * lFrequency + lOctaveOffsets[i].y;
+                        lSampleX = (x - lHalfWidth) / pScale * lFrequency + lOctaveOffsets[i].x;
+                        lSampleY = (y - lHalfHeight) / pScale * lFrequency + lOctaveOffsets[i].y;
 
                         lPerlinValue = Mathf.PerlinNoise(lSampleX, lSampleY) * 2 - 1;
                         lNoiseHeight += lPerlinValue * lAmplitude;
