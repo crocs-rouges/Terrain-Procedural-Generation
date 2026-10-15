@@ -51,19 +51,11 @@ namespace Com.IsartDigital
         {
             colorMap = new Color[mapWidth * mapHeight];
             for (int y = 0; y < mapHeight; y++)
-            {
                 for (int x = 0; x < mapWidth; x++)
-                {
-                    for (int lRegionIndex = 0; lRegionIndex < regions.Length; lRegionIndex++)
-                    {
-                        if (regions[lRegionIndex].minHeight < noiseMap[x, y] &&
-                        regions[lRegionIndex].maxHeight >= noiseMap[x, y])
-                        {
-                            colorMap[y * mapWidth + x] = regions[lRegionIndex].color;
-                        }
-                    }
-                }
-            }
+                    foreach (TerrainType lRegion in regions)
+                        if (lRegion.minHeight < noiseMap[x, y] &&
+                            lRegion.maxHeight >= noiseMap[x, y])
+                            colorMap[y * mapWidth + x] = lRegion.color;
         }
     }
 

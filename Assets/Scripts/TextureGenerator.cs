@@ -9,7 +9,7 @@ namespace Com.IsartDigital
         public static Texture2D TextureFromColor(Color[] pColorMap, int pMapWidth, int pMapHeight, bool pIsBlurr = false)
         {
             Texture2D lTexture = new Texture2D(pMapWidth, pMapHeight);
-            if (pIsBlurr)
+            if (!pIsBlurr)
             {
                 lTexture.filterMode = FilterMode.Point;
                 lTexture.wrapMode = TextureWrapMode.Clamp;
