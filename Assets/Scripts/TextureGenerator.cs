@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 
 // Author : Romain Chevalier
 
@@ -7,9 +6,14 @@ namespace Com.IsartDigital
 {
     public static class TextureGenerator
     {
-        public static Texture2D TextureFromColor(Color[] pColorMap, int pMapWidth, int pMapHeight)
+        public static Texture2D TextureFromColor(Color[] pColorMap, int pMapWidth, int pMapHeight, bool pIsBlurr = false)
         {
             Texture2D lTexture = new Texture2D(pMapWidth, pMapHeight);
+            if (pIsBlurr)
+            {
+                lTexture.filterMode = FilterMode.Point;
+                lTexture.wrapMode = TextureWrapMode.Clamp;
+            }
             lTexture.SetPixels(pColorMap);
             lTexture.Apply();
             return lTexture;
