@@ -8,6 +8,20 @@ namespace Com.IsartDigital
     public class MapDislplay : MonoBehaviour
     {
         [SerializeField] private Renderer textureRenderer;
+
+        /// <summary>
+        /// Draw the given Texture
+        /// </summary>
+        public void DrawTexture(Texture2D pTexture)
+        {
+            textureRenderer.material.mainTexture = pTexture;
+            textureRenderer.transform.localScale = new Vector3(pTexture.width, 1, pTexture.height);
+        }
+
+        /// <summary>
+        /// Draw the Noise Map in black & White without Height
+        /// only 2D View
+        /// </summary>
         public void DrawNoiseMap(float[,] pNoiseMap)
         {
             // Create New Texture

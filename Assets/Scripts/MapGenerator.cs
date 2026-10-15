@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 // Author : Romain Chevalier
@@ -24,13 +25,52 @@ namespace Com.IsartDigital
         [SerializeField] private int seed = 1;
         [SerializeField] private Vector2 offset;
 
+        [Header("Regions")]
+        [SerializeField] private TerrainType[] regions;
+        [SerializeField] private bool drawNoiseMap = false; // if false show color
+
         private float[,] noiseMap;
+        private Color[] colorMap;
 
         public void GenerateMap()
         {
             noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale,
             octave, persistance, lacunarity, offset);
-            mapDislplay.DrawNoiseMap(noiseMap);
+
+            ApplyColorToNoiseMap();
+
+
+            Texture2D lTexture;
+            if (drawNoiseMap) lTexture = TextureGenerator.TextureFromHeightMap(noiseMap);
+            else lTexture = TextureGenerator.TextureFromColor(colorMap, mapWidth, mapHeight);
+
+            mapDislplay.DrawTexture(lTexture);
         }
+
+        private void ApplyColorToNoiseMap()
+        {
+            colorMap = new Color[mapWidth * mapHeight];
+            for (int y = 0; y < mapHeight; y++)
+            {
+                for (int x = 0; x < mapWidth; x++)
+                {
+                    for (int lRegionIndex = 0; lRegionIndex < regions.Length; lRegionIndex++)
+                    {
+                        if (regions[lRegionIndex].height >= noiseMap[x, y])
+                        {
+                            colorMap[y * mapWidth + x] = regions[lRegionIndex].color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    [Serializable]
+    public struct TerrainType
+    {
+        public string name;
+        public float height;
+        public Color color;
     }
 }
