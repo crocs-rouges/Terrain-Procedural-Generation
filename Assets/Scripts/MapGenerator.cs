@@ -56,7 +56,8 @@ namespace Com.IsartDigital
                 {
                     for (int lRegionIndex = 0; lRegionIndex < regions.Length; lRegionIndex++)
                     {
-                        if (regions[lRegionIndex].height >= noiseMap[x, y])
+                        if (regions[lRegionIndex].minHeight < noiseMap[x, y] &&
+                        regions[lRegionIndex].maxHeight >= noiseMap[x, y])
                         {
                             colorMap[y * mapWidth + x] = regions[lRegionIndex].color;
                         }
@@ -70,7 +71,8 @@ namespace Com.IsartDigital
     public struct TerrainType
     {
         public string name;
-        public float height;
+        public float minHeight;
+        public float maxHeight;
         public Color color;
     }
 }
