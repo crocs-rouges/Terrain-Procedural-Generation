@@ -9,6 +9,7 @@ namespace Com.IsartDigital
         [SerializeField] private Renderer textureRenderer;
         [SerializeField] private MeshFilter meshFilter;
         [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private MeshCollider meshCollider;
 
         /// <summary>
         /// Draw the given Texture
@@ -22,6 +23,7 @@ namespace Com.IsartDigital
         public void DrawMesh(MeshData pMeshData, Texture2D pTexture)
         {
             meshFilter.sharedMesh = pMeshData.CreateMesh();
+            meshCollider.sharedMesh = meshFilter.sharedMesh;
             meshRenderer.sharedMaterial.mainTexture = pTexture;
             textureRenderer.transform.localScale = Vector3.one;
         }

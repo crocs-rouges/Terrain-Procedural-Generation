@@ -24,6 +24,7 @@ namespace Com.IsartDigital
         [SerializeField, Range(0, 1)] private float persistance = 1;
         [Tooltip("Remove Detail from the Noise")]
         [SerializeField, Range(1, 10)] private float lacunarity = 1;
+        [SerializeField] private bool isBlurr = false;
 
         [Header("Pseudo Random")]
         [SerializeField] private int seed = 1;
@@ -32,6 +33,9 @@ namespace Com.IsartDigital
         [Header("Regions")]
         [SerializeField] private TerrainType[] regions;
         [SerializeField] private DrawMode drawMode;
+
+        [Header("Mesh")]
+        [SerializeField, Range(0, 100)] private float heightMultiply = 1;
 
 
         private float[,] noiseMap;
@@ -46,13 +50,13 @@ namespace Com.IsartDigital
 
 
             if (drawMode == DrawMode.NoiseMap)
-                mapDislplay.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap));
+                mapDislplay.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap, isBlurr));
             else if (drawMode == DrawMode.ColorMap)
                 mapDislplay.DrawTexture(TextureGenerator.TextureFromColor(
-                    colorMap, mapWidth, mapHeight));
+                    colorMap, mapWidth, mapHeight, isBlurr));
             else if (drawMode == DrawMode.MeshMap)
-                mapDislplay.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap), TextureGenerator.TextureFromColor(
-                    colorMap, mapWidth, mapHeight));
+                mapDislplay.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, heightMultiply), TextureGenerator.TextureFromColor(
+                    colorMap, mapWidth, mapHeight, isBlurr));
         }
 
         private void ApplyColorToNoiseMap()

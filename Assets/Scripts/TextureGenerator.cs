@@ -19,7 +19,7 @@ namespace Com.IsartDigital
             return lTexture;
         }
 
-        public static Texture2D TextureFromHeightMap(float[,] pHeightMap)
+        public static Texture2D TextureFromHeightMap(float[,] pHeightMap, bool pIsBlurr = false)
         {
             int lWidth = pHeightMap.GetLength(0);
             int lHeight = pHeightMap.GetLength(1);
@@ -30,7 +30,7 @@ namespace Com.IsartDigital
                 for (int x = 0; x < lWidth; x++)
                     lColorMap[y * lWidth + x] = Color.Lerp(Color.black, Color.white, pHeightMap[x, y]);
 
-            return TextureFromColor(lColorMap, lWidth, lHeight);
+            return TextureFromColor(lColorMap, lWidth, lHeight, pIsBlurr);
         }
     }
 }

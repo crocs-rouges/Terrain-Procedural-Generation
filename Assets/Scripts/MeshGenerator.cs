@@ -6,7 +6,7 @@ namespace Com.IsartDigital
 {
     public static class MeshGenerator
     {
-        public static MeshData GenerateTerrainMesh(float[,] pHeightMap)
+        public static MeshData GenerateTerrainMesh(float[,] pHeightMap, float pHeightMultiply)
         {
             int lWidth = pHeightMap.GetLength(0);
             int lHeight = pHeightMap.GetLength(1);
@@ -25,10 +25,10 @@ namespace Com.IsartDigital
                 for (int x = 0; x < lWidth; x++)
                 {
                     lPointPosition = new Vector3(lTopLeftX + x,
-                        pHeightMap[x, y], lTopLeftZ - y);
+                        pHeightMap[x, y] * pHeightMultiply, lTopLeftZ - y);
 
                     lMeshData.vertices[lVertexIndex] = lPointPosition;
-                    lMeshData.Uvs[lVertexIndex] = new Vector2(x / (float)lWidth, y / (float)lHeight);
+                    lMeshData.uvs[lVertexIndex] = new Vector2(x / (float)lWidth, y / (float)lHeight);
 
                     if (x < lWidth - 1 && y < lHeight - 1)
                     {
@@ -61,7 +61,7 @@ namespace Com.IsartDigital
         /// <summary>
         /// Cell Position in Space
         /// </summary>
-        public Vector2[] Uvs;
+        public Vector2[] uvs;
         /// <summary>
         /// 2 Triangles per Vectice
         /// to Find How many Triangles we need to know how many Vertices we have
@@ -81,7 +81,7 @@ namespace Com.IsartDigital
         public MeshData(int pMeshWidth, int pMeshHeight)
         {
             vertices = new Vector3[pMeshWidth * pMeshHeight];
-            Uvs = new Vector2[pMeshWidth * pMeshHeight];
+            uvs = new Vector2[pMeshWidth * pMeshHeight];
 
             // Triangles Calcul
             // If 25 pixels, we have 24 Cells (so Width-1)
@@ -104,10 +104,12 @@ namespace Com.IsartDigital
 
         public Mesh CreateMesh()
         {
-            Mesh lMesh = new Mesh();
-            lMesh.vertices = vertices;
-            lMesh.uv = Uvs;
-            lMesh.triangles = triangles;
+            Mesh lMesh = new Mesh
+            {
+                vertices = vertices,
+                uv = uvs,
+                triangles = triangles
+            };
 
             // Recalculate for Lightning Reflexion
             lMesh.RecalculateNormals();
