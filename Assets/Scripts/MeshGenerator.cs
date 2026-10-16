@@ -6,7 +6,8 @@ namespace Com.IsartDigital
 {
     public static class MeshGenerator
     {
-        public static MeshData GenerateTerrainMesh(float[,] pHeightMap, float pHeightMultiply)
+        public static MeshData GenerateTerrainMesh(float[,] pHeightMap,
+        float pHeightMultiply, AnimationCurve pHeightCurve, bool pUseHeightCurve)
         {
             int lWidth = pHeightMap.GetLength(0);
             int lHeight = pHeightMap.GetLength(1);
@@ -24,8 +25,12 @@ namespace Com.IsartDigital
             for (int y = 0; y < lHeight; y++)
                 for (int x = 0; x < lWidth; x++)
                 {
+                    float lPointHeight = pUseHeightCurve
+                        ? pHeightCurve.Evaluate(pHeightMap[x, y]) * pHeightMultiply
+                        : pHeightMap[x, y] * pHeightMultiply;
+
                     lPointPosition = new Vector3(lTopLeftX + x,
-                        pHeightMap[x, y] * pHeightMultiply, lTopLeftZ - y);
+                        lPointHeight, lTopLeftZ - y);
 
                     lMeshData.vertices[lVertexIndex] = lPointPosition;
                     lMeshData.uvs[lVertexIndex] = new Vector2(x / (float)lWidth, y / (float)lHeight);

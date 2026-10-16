@@ -36,6 +36,8 @@ namespace Com.IsartDigital
 
         [Header("Mesh")]
         [SerializeField, Range(0, 100)] private float heightMultiply = 1;
+        [SerializeField] private AnimationCurve heightcurve;
+        [SerializeField] private bool useHeightCurve = true;
 
 
         private float[,] noiseMap;
@@ -55,7 +57,7 @@ namespace Com.IsartDigital
                 mapDislplay.DrawTexture(TextureGenerator.TextureFromColor(
                     colorMap, mapWidth, mapHeight, isBlurr));
             else if (drawMode == DrawMode.MeshMap)
-                mapDislplay.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, heightMultiply), TextureGenerator.TextureFromColor(
+                mapDislplay.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, heightMultiply, heightcurve, useHeightCurve), TextureGenerator.TextureFromColor(
                     colorMap, mapWidth, mapHeight, isBlurr));
         }
 
