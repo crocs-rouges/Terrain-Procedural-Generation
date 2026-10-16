@@ -5,7 +5,11 @@ using UnityEngine;
 
 namespace Com.IsartDigital
 {
-    // [ExecuteAlways]
+    public enum DrawMode
+    {
+        NoiseMap, ColorMap, MeshMap
+    }
+
     public class MapGenerator : MonoBehaviour
     {
         [SerializeField] private MapDislplay mapDislplay;
@@ -27,7 +31,8 @@ namespace Com.IsartDigital
 
         [Header("Regions")]
         [SerializeField] private TerrainType[] regions;
-        [SerializeField] private bool drawNoiseMap = false; // if false show color
+        [SerializeField] private DrawMode drawMode;
+
 
         private float[,] noiseMap;
         private Color[] colorMap;
@@ -40,11 +45,14 @@ namespace Com.IsartDigital
             ApplyColorToNoiseMap();
 
 
-            Texture2D lTexture;
-            if (drawNoiseMap) lTexture = TextureGenerator.TextureFromHeightMap(noiseMap);
-            else lTexture = TextureGenerator.TextureFromColor(colorMap, mapWidth, mapHeight);
-
-            mapDislplay.DrawTexture(lTexture);
+            if (drawMode == DrawMode.NoiseMap)
+                mapDislplay.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap));
+            else if (drawMode == DrawMode.ColorMap)
+                mapDislplay.DrawTexture(TextureGenerator.TextureFromColor(
+                    colorMap, mapWidth, mapHeight));
+            else if (drawMode == DrawMode.MeshMap)
+                mapDislplay.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap), TextureGenerator.TextureFromColor(
+                    colorMap, mapWidth, mapHeight));
         }
 
         private void ApplyColorToNoiseMap()
