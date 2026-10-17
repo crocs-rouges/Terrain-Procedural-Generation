@@ -15,6 +15,7 @@ namespace Com.IsartDigital
         [SerializeField] private MapDislplay mapDislplay;
 
         [Header("Generic Noise Parameter")]
+        [SerializeField] private bool isSimpleNoise = false;
         [SerializeField, Range(1, 500)] private int mapWidth = 10;
         [SerializeField, Range(1, 500)] private int mapHeight = 10;
         [SerializeField, Range(1, 150)] private float noiseScale = 1;
@@ -47,6 +48,7 @@ namespace Com.IsartDigital
         {
             noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale,
             octave, persistance, lacunarity, offset);
+            if (isSimpleNoise) noiseMap = Noise.GenerateSimpleNoiseMap(mapWidth, mapHeight, noiseScale);
 
             ApplyColorToNoiseMap();
 
@@ -57,8 +59,11 @@ namespace Com.IsartDigital
                 mapDislplay.DrawTexture(TextureGenerator.TextureFromColor(
                     colorMap, mapWidth, mapHeight, isBlurr));
             else if (drawMode == DrawMode.MeshMap)
-                mapDislplay.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, heightMultiply, heightcurve, useHeightCurve), TextureGenerator.TextureFromColor(
-                    colorMap, mapWidth, mapHeight, isBlurr));
+                mapDislplay.DrawMesh(
+                    MeshGenerator.GenerateTerrainMesh(noiseMap,
+                        heightMultiply, heightcurve, useHeightCurve),
+                    TextureGenerator.TextureFromColor(
+                        colorMap, mapWidth, mapHeight, isBlurr));
         }
 
         private void ApplyColorToNoiseMap()

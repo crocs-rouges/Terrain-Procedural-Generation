@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // Author : Romain Chevalier
@@ -8,7 +9,7 @@ namespace Com.IsartDigital
     {
         private const int OFFSET_MAX_VALUE = 100000;
         /// <summary>
-        /// First Noise Map Ultra Basic No Change Paramter on the Noise
+        /// First Noise Map Ultra Basic No Change Parameter on the Noise
         /// </summary>
         /// <param name="pMapWidth"></param>
         /// <param name="pMapHeight"></param>
@@ -52,20 +53,26 @@ namespace Com.IsartDigital
         Vector2 pOffset)
         {
             #region Variables
+            float lHalfWidth = pMapWidth / 2f;
+            float lHalfHeight = pMapHeight / 2f;
+
+            // Create Noise Map
             float[,] lNoiseMap = new float[pMapWidth, pMapHeight];
 
             // Seed Parameter
             System.Random lRng = new System.Random(pSeed);
             Vector2[] lOctaveOffsets = new Vector2[pOctave];
             float lOffsetX, lOffsetY;
+            // 
 
+            // Values to at the End Clamp between 0 & 1
             float lMaxNoiseHeight = float.MinValue;
             float lMinNoiseHeight = float.MaxValue;
+            // 
 
-            float lHalfWidth = pMapWidth / 2f;
-            float lHalfHeight = pMapHeight / 2f;
-
-            float lSampleX, lSampleY, lPerlinValue, lAmplitude, lFrequency, lNoiseHeight;
+            // All Needed Values for Loop
+            float lSampleX, lSampleY, lBasePerlinValue, lPerlinValue,
+            lAmplitude, lFrequency, lNoiseHeight;
             #endregion
             #region Logic
             // Seed Offset Creation
@@ -84,7 +91,7 @@ namespace Com.IsartDigital
             for (int y = 0; y < pMapHeight; y++)
                 for (int x = 0; x < pMapWidth; x++)
                 {
-                    // Reset Value For All New Line
+                    // Reset Value For Every Pixel
                     lAmplitude = 1;
                     lFrequency = 1;
                     lNoiseHeight = 0;
@@ -95,8 +102,10 @@ namespace Com.IsartDigital
                         lSampleX = (x - lHalfWidth) / pScale * lFrequency + lOctaveOffsets[lIndex].x;
                         lSampleY = (y - lHalfHeight) / pScale * lFrequency + lOctaveOffsets[lIndex].y;
 
-                        // Make Values Goes from 0;1 to -1;1
-                        lPerlinValue = Mathf.PerlinNoise(lSampleX, lSampleY) * 2 - 1;
+                        // Get Perlin Value between 0 & 1
+                        lBasePerlinValue = Mathf.PerlinNoise(lSampleX, lSampleY);
+                        // Make Values goes from 0;1 to -1;1
+                        lPerlinValue = lBasePerlinValue * 2 - 1;
                         // Add Amplitude to Noise Height
                         lNoiseHeight += lPerlinValue * lAmplitude;
 
@@ -109,14 +118,16 @@ namespace Com.IsartDigital
                         lMaxNoiseHeight = lNoiseHeight;
                     else if (lNoiseHeight < lMinNoiseHeight)
                         lMinNoiseHeight = lNoiseHeight;
-                    // Update Noise Map w New Height Value
+
+                    // Update Noise Map w New Height Value from -1;1 * amplitude
                     lNoiseMap[x, y] = lNoiseHeight;
                 }
 
             // Noise Map Return Value greater than 0 & 1 so we clamp Them With a Loop
             for (int y = 0; y < pMapHeight; y++)
                 for (int x = 0; x < pMapWidth; x++)
-                    lNoiseMap[x, y] = Mathf.InverseLerp(lMinNoiseHeight, lMaxNoiseHeight, lNoiseMap[x, y]);
+                    lNoiseMap[x, y] = Mathf.InverseLerp(lMinNoiseHeight,
+                        lMaxNoiseHeight, lNoiseMap[x, y]);
 
             return lNoiseMap;
             #endregion

@@ -28,13 +28,16 @@ namespace Com.IsartDigital
                     float lPointHeight = pUseHeightCurve
                         ? pHeightCurve.Evaluate(pHeightMap[x, y]) * pHeightMultiply
                         : pHeightMap[x, y] * pHeightMultiply;
-
+                    // Position in Space World
                     lPointPosition = new Vector3(lTopLeftX + x,
                         lPointHeight, lTopLeftZ - y);
 
+                    // Position in Space World
                     lMeshData.vertices[lVertexIndex] = lPointPosition;
+                    // Position in List World
                     lMeshData.uvs[lVertexIndex] = new Vector2(x / (float)lWidth, y / (float)lHeight);
 
+                    // Create Triangles
                     if (x < lWidth - 1 && y < lHeight - 1)
                     {
                         // Points For Vertices
@@ -61,6 +64,7 @@ namespace Com.IsartDigital
         /// <summary>
         /// Number of Cell we Have = Number of pixel of the noise
         /// One Value is one Point of the Mesh
+        /// Value in Space Position
         /// </summary>
         public Vector3[] vertices; // width * height
         /// <summary>
@@ -75,6 +79,7 @@ namespace Com.IsartDigital
         public int[] triangles; // 2 triangles per Vertice, 3 values per Triangle
         /// <summary>
         /// Max number of Points For All the Triangles
+        /// if divided by 3 == number of triangles
         /// </summary>
         int triangleIndex;
 
@@ -96,7 +101,7 @@ namespace Com.IsartDigital
             // 6 because each Triangle is 3 points and 1 vertices is 2 triangles
             // 3 points * 2 triangles = 6
             lFinalValue *= 6;
-            triangles = new int[(pMeshWidth - 1) * (pMeshHeight - 1) * 6];
+            triangles = new int[lFinalValue];
         }
 
         public void AddTriangle(int pValueA, int pValueB, int pValueC)
@@ -113,7 +118,7 @@ namespace Com.IsartDigital
             {
                 vertices = vertices,
                 uv = uvs,
-                triangles = triangles
+                triangles = triangles,
             };
 
             // Recalculate for Lightning Reflexion
