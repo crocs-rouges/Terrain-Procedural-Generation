@@ -21,11 +21,12 @@ namespace Com.IsartDigital
             MeshData lMeshData = new MeshData(lWidth, lHeight);
             int lVertexIndex = 0;
             Vector3 lPointPosition;
+            float lPointHeight;
 
             for (int y = 0; y < lHeight; y++)
                 for (int x = 0; x < lWidth; x++)
                 {
-                    float lPointHeight = pUseHeightCurve
+                    lPointHeight = pUseHeightCurve
                         ? pHeightCurve.Evaluate(pHeightMap[x, y]) * pHeightMultiply
                         : pHeightMap[x, y] * pHeightMultiply;
                     // Position in Space World
